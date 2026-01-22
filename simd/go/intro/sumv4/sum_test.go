@@ -1,4 +1,4 @@
-package sumv3
+package sumv4
 
 import (
 	"fmt"

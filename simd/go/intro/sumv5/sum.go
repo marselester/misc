@@ -1,0 +1,39 @@
+package sumv5
+
+import (
+	"simd/archsimd"
+	"unsafe"
+)
+
+//go:noinline
+func SumVec(input []int64) (sum int64) {
+	i := 0
+	inputLen := len(input)
+
+	// If we can't use two YMM vectors, fallback to a scalar sum.
+	// Otherwise keep adding YMM vectors in the vector loop.
+	if inputLen >= 8 {
+		y0 := archsimd.LoadInt64x4Slice(input)
+		loopEnd := inputLen - inputLen%4
+		inputData := unsafe.Pointer(&input[0])
+
+		for i += 4; i < loopEnd; i += 4 {
+			chunk := (*[4]int64)(unsafe.Add(inputData, i*8))
+			y1 := archsimd.LoadInt64x4(chunk)
+			y0 = y0.Add(y1)
+		}
+
+		// Horizontal reduction.
+		x0, x1 := y0.GetLo(), y0.GetHi()
+		x0 = x0.Add(x1)
+		sum = x0.GetElem(0) + x0.GetElem(1)
+	}
+
+	// Summarize what we couldn't with SIMD.
+	tail := input[i:]
+	for _, v := range tail {
+		sum += v
+	}
+
+	return sum
+}

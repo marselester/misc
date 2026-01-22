@@ -1,7 +1,9 @@
 # Intro to SIMD in avo
 
-Here you can find examples used in
-[Intro to SIMD in avo](https://marselester.com/intro-to-simd-in-avo.html) post.
+Here you can find examples used in:
+
+- [Intro to SIMD in avo](https://marselester.com/intro-to-simd-in-avo.html)
+- [Go archsimd preview](https://marselester.com/go-archsimd-preview.html)
 
 SIMD sum on 131,072 array is ~54% faster than a scalar version.
 
@@ -38,4 +40,10 @@ ok  	intro/sumv3	24.212s
 $ benchstat old.txt new.txt
 name    old time/op    new time/op    delta
 Sum-12    38.9µs ± 0%    17.8µs ± 2%  -54.23%  (p=0.000 n=8+10)
+```
+
+Sum using [simd/archsimd](https://pkg.go.dev/simd/archsimd) package.
+
+```sh
+$ GOEXPERIMENT=simd go1.26rc2 test ./sumv4
 ```
