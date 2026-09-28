@@ -1,0 +1,13 @@
+.{
+    .name = .mylib,
+    .version = "0.0.0",
+    .fingerprint = 0xe7f949297b78b184,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "include",
+    },
+}
